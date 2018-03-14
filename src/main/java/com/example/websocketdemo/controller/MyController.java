@@ -1,14 +1,15 @@
 package com.example.websocketdemo.controller;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.websocketdemo.config.PropertyLoader;
 import com.example.websocketdemo.model.EnvironmentConfig;
 import com.example.websocketdemo.service.helper.Helper;
+
 
 /**
  * @author amkumar
@@ -30,7 +31,20 @@ public class MyController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return myBean.getServerIP();
+		return getProperty("env.server.ip");
+
+	}
+	
+	private String getProperty(String s) {
+		Properties prop = new Properties();
+
+		try {
+			prop.load(getClass().getClassLoader().getResourceAsStream("enviprop.properties"));
+		} catch (java.io.IOException e) {
+			System.out.println(e);
+		}
+
+		return prop.getProperty(s);
 
 	}
 
